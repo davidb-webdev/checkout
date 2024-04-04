@@ -16,4 +16,14 @@ const createCheckoutSession = async (req, res) => {
   res.status(200).json({ url: session.url });
 };
 
-module.exports = { createCheckoutSession };
+const getProducts = async (req, res) => {
+  const stripe = initStripe();
+
+  const products = await stripe.products.list({
+    limit: 10
+  });
+
+  res.status(200).json({ products: products.data });
+};
+
+module.exports = { createCheckoutSession, getProducts };
