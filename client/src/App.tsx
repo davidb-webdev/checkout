@@ -1,33 +1,27 @@
 import { useState } from "react";
+import { createCheckoutSession, getProducts } from "./services/stripeServices";
+import IProduct from "./models/IProduct";
 
 const App = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
 
   const handlePayment = async () => {
-    const url =
-      import.meta.env.VITE_BACKEND_URL + "/stripe/create-checkout-session";
-    const payload = {
-      method: "POST"
-    };
-    const response = await fetch(url, payload);
-    const data = await response.json();
+    const data = await createCheckoutSession();
     console.log(data);
     window.location = data.url;
   };
 
-  const getProducts = async () => {
-    const url = import.meta.env.VITE_BACKEND_URL + "/stripe/products";
-    const response = await fetch(url);
-    const data = await response.json();
+  const getProductsHandler = async () => {
+    const data = await getProducts();
 
-    console.log(data.products);
-    setProducts(data.products);
+    console.log(data);
+    setProducts(data.data);
   };
 
   return (
     <>
       <button onClick={handlePayment}>Pay now</button>
-      <button onClick={getProducts}>Get products</button>
+      <button onClick={getProductsHandler}>Get products</button>
 
       <div>
         {products.map((product) => (

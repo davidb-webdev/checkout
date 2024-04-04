@@ -23,7 +23,7 @@ const getProducts = async (req, res) => {
     limit: 10
   });
 
-  res.status(200).json({ products: products.data });
+  res.status(200).json(products);
 };
 
 module.exports = { createCheckoutSession, getProducts };
