@@ -20,10 +20,19 @@ const getProducts = async (req, res) => {
   const stripe = initStripe();
 
   const products = await stripe.products.list({
+    active: true,
     limit: 10
   });
 
   res.status(200).json(products);
 };
 
-module.exports = { createCheckoutSession, getProducts };
+const getProduct = async (req, res) => {
+  const stripe = initStripe();
+
+  const product = await stripe.products.retrieve(req.params.id);
+
+  res.status(200).json(product);
+};
+
+module.exports = { createCheckoutSession, getProducts, getProduct };

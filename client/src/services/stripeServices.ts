@@ -1,8 +1,19 @@
+import IProduct from "../models/IProduct";
 import IProductsResponse from "../models/IProductsResponse";
 
-const url = import.meta.env.VITE_BACKEND_URL + "/stripe/products";
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+export const getProduct = async (productId: string) => {
+  const url = baseUrl + "/stripe/product/" + productId;
+  const response = await fetch(url);
+  const data: IProduct = await response.json();
+
+  return data;
+};
 
 export const getProducts = async () => {
+  const url = baseUrl + "/stripe/products";
+
   const response = await fetch(url);
   const data: IProductsResponse = await response.json();
 
@@ -10,13 +21,12 @@ export const getProducts = async () => {
 };
 
 export const createCheckoutSession = async () => {
-	const url =
-		import.meta.env.VITE_BACKEND_URL + "/stripe/create-checkout-session";
-	const payload = {
-		method: "POST"
-	};
-	const response = await fetch(url, payload);
-	const data = await response.json();
+  const url = baseUrl + "/stripe/create-checkout-session";
+  const payload = {
+    method: "POST"
+  };
+  const response = await fetch(url, payload);
+  const data = await response.json();
 
-	return data;
+  return data;
 };

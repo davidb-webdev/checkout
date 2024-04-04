@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { createCheckoutSession, getProducts } from "./services/stripeServices";
+import {
+  createCheckoutSession,
+  getProduct,
+  getProducts
+} from "./services/stripeServices";
 import IProduct from "./models/IProduct";
 
 const App = () => {
@@ -18,14 +22,22 @@ const App = () => {
     setProducts(data.data);
   };
 
+  const getProductHandler = async () => {
+    const data = await getProduct("prod_Pr9a1VJg00Mago");
+
+    console.log(data);
+    setProducts([data]);
+  };
+
   return (
     <>
       <button onClick={handlePayment}>Pay now</button>
       <button onClick={getProductsHandler}>Get products</button>
+      <button onClick={getProductHandler}>Get product</button>
 
       <div>
         {products.map((product) => (
-          <div>
+          <div key={product.name}>
             <img src={product.images[0]} alt={product.name} />
             <p>{product.name}</p>
             <button>Dummy</button>
