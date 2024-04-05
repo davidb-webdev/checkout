@@ -1,27 +1,26 @@
-import { useState } from "react";
-import CartItem from "../models/CartItem";
+import { useContext } from "react";
+import CartContext from "../contexts/CartContext";
+import { CartActionType } from "../reducers/CartReducer";
 
 const Cart = () => {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const addToCart = (id: string) => {
-    if (cart.some((item) => item.id === id)) {
-      setCart(
-        cart.map((item) => {
-          return item.id === id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item;
-        })
-      );
-    } else {
-      setCart([...cart, new CartItem(id, 1)]);
-    }
-  };
-
+  const { cart, dispatch } = useContext(CartContext);
   return (
     <ul>
       {cart.map((item) => (
         <li key={item.id}>
-          {item.id} - {item.quantity}
+          <span>
+            {item.id} - {item.quantity}
+          </span>
+          <button
+            onClick={() =>
+              dispatch({
+                type: CartActionType.REMOVED,
+                payload: item.id
+              })
+            }
+          >
+            ❌
+          </button>
         </li>
       ))}
     </ul>

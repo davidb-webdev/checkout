@@ -5,7 +5,10 @@ import {
   getProducts
 } from "./services/stripeServices";
 import IProduct from "./models/IProduct";
-import CartReducer, { CartAction } from "./reducers/CartReducer";
+import CartReducer from "./reducers/CartReducer";
+import CartContext from "./contexts/CartContext";
+import ProductList from "./components/ProductList";
+import Cart from "./components/Cart";
 
 const App = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -32,50 +35,14 @@ const App = () => {
   };
 
   return (
-    <>
+    <CartContext.Provider value={{ cart, dispatch }}>
       <button onClick={handlePayment}>Pay now</button>
       <button onClick={getProductsHandler}>Get products</button>
       <button onClick={getProductHandler}>Get product</button>
 
-      <div>
-        {products.map((product) => (
-          <div key={product.name}>
-            <img src={product.images[0]} alt={product.name} />
-            <p>{product.name}</p>
-            <button
-              onClick={() =>
-                dispatch({
-                  type: CartAction.ADDED,
-                  payload: product.id
-                })
-              }
-            >
-              🛒
-            </button>
-          </div>
-        ))}
-      </div>
-
-      <ul>
-        {cart.map((item) => (
-          <li key={item.id}>
-            <span>
-              {item.id} - {item.quantity}
-            </span>
-            <button
-              onClick={() =>
-                dispatch({
-                  type: CartAction.REMOVED,
-                  payload: item.id
-                })
-              }
-            >
-              ❌
-            </button>
-          </li>
-        ))}
-      </ul>
-    </>
+      <ProductList products={products} />
+      <Cart />
+    </CartContext.Provider>
   );
 };
 
