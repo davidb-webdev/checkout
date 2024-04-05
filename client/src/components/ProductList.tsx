@@ -2,21 +2,11 @@ import { useContext, useState } from "react";
 import IProduct from "../models/IProduct";
 import { CartActionType } from "../reducers/CartReducer";
 import CartContext from "../contexts/CartContext";
-import {
-  createCheckoutSession,
-  getProduct,
-  getProducts
-} from "../services/stripeServices";
+import { getProduct, getProducts } from "../services/stripeServices";
 
 const ProductList = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const { dispatch } = useContext(CartContext);
-
-  const handlePayment = async () => {
-    const data = await createCheckoutSession();
-    console.log(data);
-    window.location = data.url;
-  };
 
   const getProductsHandler = async () => {
     const data = await getProducts();
@@ -34,7 +24,6 @@ const ProductList = () => {
 
   return (
     <div>
-      <button onClick={handlePayment}>Pay now</button>
       <button onClick={getProductsHandler}>Get products</button>
       <button onClick={getProductHandler}>Get product</button>
 
@@ -43,12 +32,14 @@ const ProductList = () => {
           <img src={product.images[0]} alt={product.name} />
           <p>{product.name}</p>
           <button
-            onClick={() =>
+            disabled={!product.default_price}
+            onClick={() => {
+              if (!product.default_price) return;
               dispatch({
                 type: CartActionType.ADDED,
-                payload: product.id
-              })
-            }
+                payload: product.default_price
+              });
+            }}
           >
             🛒
           </button>
