@@ -1,32 +1,16 @@
-import { useContext, useState } from "react";
-import IProduct from "../models/IProduct";
+import { useContext } from "react";
 import { CartActionType } from "../reducers/CartReducer";
 import CartContext from "../contexts/CartContext";
-import { getProduct, getProducts } from "../services/stripeServices";
+import useProducts from "../hooks/useProducts";
+import ProductDetails from "./ProductDetails";
 
 const ProductList = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
   const { dispatch } = useContext(CartContext);
-
-  const getProductsHandler = async () => {
-    const data = await getProducts();
-
-    console.log(data);
-    setProducts(data.data);
-  };
-
-  const getProductHandler = async () => {
-    const data = await getProduct("prod_Pr9a1VJg00Mago");
-
-    console.log(data);
-    setProducts([data]);
-  };
+  const products = useProducts();
 
   return (
-    <div>
-      <button onClick={getProductsHandler}>Get products</button>
-      <button onClick={getProductHandler}>Get product</button>
-
+    <>
+      <h2>Product list</h2>
       {products.map((product) => (
         <div key={product.name}>
           <img src={product.images[0]} alt={product.name} />
@@ -45,7 +29,10 @@ const ProductList = () => {
           </button>
         </div>
       ))}
-    </div>
+      {products.length === 0 && <p>No products in list</p>}
+
+      <ProductDetails productId="prod_PrbjqKzuOGpkfR" />
+    </>
   );
 };
 
