@@ -19,7 +19,8 @@ const getProducts = async (req, res) => {
 
   const products = await stripe.products.list({
     active: true,
-    limit: 10
+    limit: 10,
+    expand: ["data.default_price"]
   });
 
   res.status(200).json(products);
@@ -28,7 +29,9 @@ const getProducts = async (req, res) => {
 const getProduct = async (req, res) => {
   const stripe = initStripe();
 
-  const product = await stripe.products.retrieve(req.params.id);
+  const product = await stripe.products.retrieve(req.params.id, {
+    expand: ["default_price"]
+  });
 
   res.status(200).json(product);
 };
