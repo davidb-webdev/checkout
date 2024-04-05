@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useReducer } from "react";
 import {
   createCheckoutSession,
   getProduct,
   getProducts
 } from "./services/stripeServices";
 import IProduct from "./models/IProduct";
+import CartReducer, { CartAction } from "./reducers/CartReducer";
 
 const App = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [cart, dispatch] = useReducer(CartReducer, []);
 
   const handlePayment = async () => {
     const data = await createCheckoutSession();
@@ -40,10 +42,39 @@ const App = () => {
           <div key={product.name}>
             <img src={product.images[0]} alt={product.name} />
             <p>{product.name}</p>
-            <button>Dummy</button>
+            <button
+              onClick={() =>
+                dispatch({
+                  type: CartAction.ADDED,
+                  payload: product.id
+                })
+              }
+            >
+              🛒
+            </button>
           </div>
         ))}
       </div>
+
+      <ul>
+        {cart.map((item) => (
+          <li key={item.id}>
+            <span>
+              {item.id} - {item.quantity}
+            </span>
+            <button
+              onClick={() =>
+                dispatch({
+                  type: CartAction.REMOVED,
+                  payload: item.id
+                })
+              }
+            >
+              ❌
+            </button>
+          </li>
+        ))}
+      </ul>
     </>
   );
 };
