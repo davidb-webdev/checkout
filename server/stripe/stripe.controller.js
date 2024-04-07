@@ -8,7 +8,7 @@ const createCheckoutSession = async (req, res) => {
       price: item.id,
       quantity: item.quantity
     })),
-    success_url: "http://localhost:5173",
+    success_url: "http://localhost:5173/ordersuccess",
     cancel_url: "http://localhost:5173"
   });
   res.status(200).json({ url: session.url });
