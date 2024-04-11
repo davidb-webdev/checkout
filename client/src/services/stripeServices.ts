@@ -32,12 +32,10 @@ export const createCheckoutSession = async (body: CartItem[]) => {
 
   const response = await fetch(url, payload);
   const data: ICreateSessionResponse = await response.json();
-  console.log(data);
   return data;
 };
 
 export const verifyOrder = async (sessionId: string) => {
-  console.log("sessionId", sessionId);
   const url = baseUrl + "/stripe/verify-order";
   const payload = {
     method: "POST",

@@ -13,7 +13,7 @@ const ConfirmOrderPage = () => {
       const data = await verifyOrder(sessionId);
       console.log(data);
       setOrderConfirmed(true);
-      localStorage.clear();
+      localStorage.removeItem("sessionId");
     };
     awaitVerifyOrder();
   });

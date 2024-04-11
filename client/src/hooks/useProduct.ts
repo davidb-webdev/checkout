@@ -10,7 +10,6 @@ const useProduct = (productId: string) => {
 
     const awaitGetProduct = async () => {
       const data = await getProduct(productId);
-      console.log(data);
       setProduct(data);
     };
     awaitGetProduct();

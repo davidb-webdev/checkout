@@ -1,5 +1,11 @@
 const initStripe = require("./stripe.util");
-const { readOrders, writeOrders } = require("../utils/fs.util.js");
+const bcrypt = require("bcrypt");
+const {
+  readOrders,
+  writeOrders,
+  readCustomers,
+  writeCustomers
+} = require("../utils/fs.util.js");
 
 const getProducts = async (req, res) => {
   const stripe = initStripe();
@@ -34,7 +40,6 @@ const createCheckoutSession = async (req, res) => {
     success_url: "http://localhost:5173/confirmorder",
     cancel_url: "http://localhost:5173/checkout"
   });
-  console.log(session.id);
   res.status(200).json({ url: session.url, sessionId: session.id });
 };
 
@@ -42,9 +47,7 @@ const verifySessionAndCreateOrder = async (req, res) => {
   const stripe = initStripe();
 
   const session = await stripe.checkout.sessions.retrieve(req.body.sessionId);
-  console.log(session);
 
-  // create order, send confirmation to frontend
   if (session.payment_status === "paid") {
     const order = {
       orderNumber: Math.floor(Math.random() * 1000000000),
@@ -62,9 +65,43 @@ const verifySessionAndCreateOrder = async (req, res) => {
   res.status(200).json("Order successful");
 };
 
+const createCustomer = async (req, res) => {
+  const { email, password } = req.body;
+  const customers = await readCustomers();
+  const customerExists = customers.find((customer) => customer.email === email);
+
+  if (customerExists) {
+    return res.status(400).json("E-mail address already used");
+  }
+
+  const stripe = initStripe();
+  let stripeCustomer;
+
+  try {
+    stripeCustomer = await stripe.customers.create({
+      name: req.body.name,
+      email: req.body.email
+    });
+  } catch (error) {
+    return res.status(400).json("stripe" + error);
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newCustomer = {
+    id: stripeCustomer.id,
+    email,
+    password: hashedPassword
+  };
+  customers.push(newCustomer);
+  writeCustomers(customers);
+
+  return res.status(200).json("Customer registered");
+};
+
 module.exports = {
   getProducts,
   getProduct,
   createCheckoutSession,
-  verifySessionAndCreateOrder
+  verifySessionAndCreateOrder,
+  createCustomer
 };
