@@ -14,7 +14,7 @@ const signInCustomer = async (req, res) => {
     return res.status(400).json("Wrong username or password");
   }
 
-  req.session.email = customerExists.email;
+  req.session.id = customerExists.id;
   res.status(200).json("Signed in");
 };
 
@@ -24,8 +24,7 @@ const signOutCustomer = (req, res) => {
 };
 
 const authorizeCustomer = (req, res) => {
-  // console.log(req.session.email);
-  if (!req.session.email) {
+  if (!req.session.id) {
     return res.status(401).json("You are not signed in");
   }
   return res.status(200).json("You are signed in");

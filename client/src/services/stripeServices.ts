@@ -24,9 +24,10 @@ export const getProducts = async () => {
 
 export const createCheckoutSession = async (body: CartItem[]) => {
   const url = baseUrl + "/stripe/create-checkout-session";
-  const payload = {
+  const payload: RequestInit = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify(body)
   };
 
@@ -37,9 +38,10 @@ export const createCheckoutSession = async (body: CartItem[]) => {
 
 export const verifyOrder = async (sessionId: string) => {
   const url = baseUrl + "/stripe/verify-order";
-  const payload = {
+  const payload: RequestInit = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({ sessionId })
   };
 
