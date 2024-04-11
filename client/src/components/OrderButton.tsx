@@ -8,8 +8,8 @@ const OrderButton = () => {
   const handlePayment = async () => {
     const data = await createCheckoutSession(cart);
     console.log(data);
-    localStorage.setItem("sessionId", JSON.stringify(data.sessionId));
-    window.location = data.url;
+    localStorage.setItem("sessionId", data.sessionId);
+    window.location.href = data.url;
   };
 
   return <button onClick={handlePayment}>Confirm order</button>;
