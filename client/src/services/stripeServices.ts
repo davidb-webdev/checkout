@@ -1,4 +1,5 @@
 import CartItem from "../models/CartItem";
+import ICreateSessionResponse from "../models/ICreateSessionResponse";
 import IProduct from "../models/IProduct";
 import IProductsResponse from "../models/IProductsResponse";
 
@@ -23,12 +24,27 @@ export const getProducts = async () => {
 
 export const createCheckoutSession = async (body: CartItem[]) => {
   const url = baseUrl + "/stripe/create-checkout-session";
-  const payload = {
+  const payload: RequestInit = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify(body)
   };
-  console.log(payload);
+
+  const response = await fetch(url, payload);
+  const data: ICreateSessionResponse = await response.json();
+  return data;
+};
+
+export const verifyOrder = async (sessionId: string) => {
+  const url = baseUrl + "/stripe/verify-order";
+  const payload: RequestInit = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ sessionId })
+  };
+
   const response = await fetch(url, payload);
   const data = await response.json();
 
