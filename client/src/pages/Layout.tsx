@@ -7,7 +7,12 @@ import Auth from "../components/Auth";
 import UserFormSwitcher from "../components/UserFormSwitcher";
 
 const Layout = () => {
-  const [cart, dispatch] = useReducer(CartReducer, []);
+  const [cart, dispatch] = useReducer(
+    CartReducer,
+    JSON.parse(localStorage.getItem("cart") || "[]")
+  );
+
+  localStorage.setItem("cart", JSON.stringify(cart));
 
   return (
     <Auth>

@@ -24,10 +24,12 @@ const CartReducer = (cart: CartItem[], action: ICartAction) => {
         return [...cart, new CartItem(id, 1)];
       }
     }
+
     case CartActionType.REMOVED: {
       const id = String(action.payload);
       return cart.filter((item) => item.id !== id);
     }
+
     default: {
       return cart;
     }

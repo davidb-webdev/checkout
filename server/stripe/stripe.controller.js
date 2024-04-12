@@ -30,7 +30,6 @@ const getProduct = async (req, res) => {
 };
 
 const createCheckoutSession = async (req, res) => {
-  // TODO: Only create one session?
   if (!req.session.id) {
     return res.status(401).json("You are not signed in");
   }
@@ -50,7 +49,6 @@ const createCheckoutSession = async (req, res) => {
 };
 
 const verifySessionAndCreateOrder = async (req, res) => {
-  // TODO: Only create one order
   if (!req.session.id) {
     return res.status(401).json("You are not signed in");
   }
@@ -108,8 +106,7 @@ const createCustomer = async (req, res) => {
 
   try {
     stripeCustomer = await stripe.customers.create({
-      name: req.body.name,
-      email: req.body.email
+      email
     });
   } catch (error) {
     return res.status(400).json("stripe" + error);
