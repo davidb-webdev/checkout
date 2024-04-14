@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { registerUser } from "../services/authServices";
-import UserForm from "./UserForm";
 import SignOutButton from "./SignOutButton";
+import RegisterUserForm from "./RegisterUserForm";
+import SignInUserForm from "./SignInUserForm";
 
 const UserFormSwitcher = () => {
-  const { signedIn, handleSignIn } = useContext(AuthContext);
+  const { signedIn } = useContext(AuthContext);
   const [showAlternate, setShowAlternate] = useState(false);
 
   return signedIn ? (
@@ -14,14 +14,8 @@ const UserFormSwitcher = () => {
     <>
       <button onClick={() => setShowAlternate(false)}>Sign In</button>
       <button onClick={() => setShowAlternate(true)}>Register</button>
-      <UserForm
-        submitFunction={(userFormData) =>
-          showAlternate
-            ? registerUser(userFormData)
-            : handleSignIn(userFormData)
-        }
-        label={showAlternate ? "Register" : "Sign In"}
-      />
+      <h2>{showAlternate ? "Register New Customer" : "Sign In"}</h2>
+      {showAlternate ? <RegisterUserForm /> : <SignInUserForm />}
     </>
   );
 };

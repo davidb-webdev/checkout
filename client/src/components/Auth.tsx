@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { authorizeUser, signIn, signOut } from "../services/authServices";
 import IAuthContext from "../models/IAuthContext";
-import UserFormData from "../models/UserFormData";
 import { AuthContext } from "../contexts/AuthContext.ts";
+import SignInUserFormData from "../models/SignInUserFormData.ts";
 
 interface IAuthProps {
   children: React.ReactNode;
@@ -43,7 +43,7 @@ function Auth({ children }: IAuthProps) {
     });
   };
 
-  authState.handleSignIn = async (userFormData: UserFormData) => {
+  authState.handleSignIn = async (userFormData: SignInUserFormData) => {
     try {
       await signIn(userFormData);
       setAuthState({

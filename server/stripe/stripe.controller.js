@@ -8,25 +8,29 @@ const {
 } = require("../utils/fs.util.js");
 
 const getProducts = async (req, res) => {
-  const stripe = initStripe();
-
-  const products = await stripe.products.list({
-    active: true,
-    limit: 10,
-    expand: ["data.default_price"]
-  });
-
-  res.status(200).json(products);
+  try {
+    const stripe = initStripe();
+    const products = await stripe.products.list({
+      active: true,
+      limit: 10,
+      expand: ["data.default_price"]
+    });
+    return res.status(200).json(products);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 };
 
 const getProduct = async (req, res) => {
-  const stripe = initStripe();
-
-  const product = await stripe.products.retrieve(req.params.id, {
-    expand: ["default_price"]
-  });
-
-  res.status(200).json(product);
+  try {
+    const stripe = initStripe();
+    const product = await stripe.products.retrieve(req.params.id, {
+      expand: ["default_price"]
+    });
+    res.status(200).json(product);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 };
 
 const createCheckoutSession = async (req, res) => {
@@ -34,18 +38,22 @@ const createCheckoutSession = async (req, res) => {
     return res.status(401).json("You are not signed in");
   }
 
-  const stripe = initStripe();
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    customer: req.session.id,
-    line_items: req.body.map((item) => ({
-      price: item.id,
-      quantity: item.quantity
-    })),
-    success_url: "http://localhost:5173/confirmorder",
-    cancel_url: "http://localhost:5173/checkout"
-  });
-  res.status(200).json({ url: session.url, sessionId: session.id });
+  try {
+    const stripe = initStripe();
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      customer: req.session.id,
+      line_items: req.body.map((item) => ({
+        price: item.id,
+        quantity: item.quantity
+      })),
+      success_url: "http://localhost:5173/confirmorder",
+      cancel_url: "http://localhost:5173/checkout"
+    });
+    res.status(200).json({ url: session.url, sessionId: session.id });
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 };
 
 const verifySessionAndCreateOrder = async (req, res) => {
@@ -53,38 +61,45 @@ const verifySessionAndCreateOrder = async (req, res) => {
     return res.status(401).json("You are not signed in");
   }
 
-  const stripe = initStripe();
-  const session = await stripe.checkout.sessions.retrieve(req.body.sessionId);
-  const lineItems = await stripe.checkout.sessions.listLineItems(
-    req.body.sessionId
-  );
-
-  console.log(session);
-  console.log(lineItems);
+  try {
+    const stripe = initStripe();
+    const session = await stripe.checkout.sessions.retrieve(req.body.sessionId);
+    const lineItems = await stripe.checkout.sessions.listLineItems(
+      req.body.sessionId
+    );
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 
   if (session.payment_status === "paid") {
-    const order = {
-      orderNumber: Math.floor(Math.random() * 1000000000),
-      orderDate: new Date(),
-      customerDetails: {
-        id: session.customer,
-        name: session.customer_details.name,
-        email: session.customer_details.email
-      },
-      orderTotal: session.amount_total,
-      deliveryPoint: 999,
-      products: lineItems.data.map((item) => {
-        return {
-          id: item.price.product,
-          amount: item.price.unit_amount,
-          quantity: item.quantity
-        };
-      })
-    };
-
     const orders = await readOrders();
-    orders.push(order);
-    await writeOrders(orders);
+    const orderExists = orders.find(
+      (order) => order.sessionId === req.body.sessionId
+    );
+
+    if (!orderExists) {
+      const order = {
+        orderNumber: Math.floor(Math.random() * 1000000000),
+        sessionId: req.body.sessionId,
+        orderDate: new Date(),
+        customerDetails: {
+          id: session.customer,
+          name: session.customer_details.name,
+          email: session.customer_details.email
+        },
+        orderTotal: session.amount_total,
+        deliveryPoint: 999,
+        products: lineItems.data.map((item) => {
+          return {
+            id: item.price.product,
+            amount: item.price.unit_amount,
+            quantity: item.quantity
+          };
+        })
+      };
+      orders.push(order);
+      await writeOrders(orders);
+    }
 
     return res.status(200).json("Order successful");
   }
@@ -93,7 +108,17 @@ const verifySessionAndCreateOrder = async (req, res) => {
 };
 
 const createCustomer = async (req, res) => {
-  const { email, password } = req.body;
+  const {
+    email,
+    password,
+    name,
+    addressLine1,
+    addressLine2,
+    postal_code,
+    city,
+    country,
+    phone
+  } = req.body;
   const customers = await readCustomers();
   const customerExists = customers.find((customer) => customer.email === email);
 
@@ -106,17 +131,33 @@ const createCustomer = async (req, res) => {
 
   try {
     stripeCustomer = await stripe.customers.create({
-      email
+      email,
+      name,
+      phone,
+      address: {
+        line1: addressLine1,
+        line2: addressLine2,
+        postal_code,
+        city,
+        country
+      }
     });
   } catch (error) {
-    return res.status(400).json("stripe" + error);
+    return res.status(400).json(error);
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newCustomer = {
     id: stripeCustomer.id,
     email,
-    password: hashedPassword
+    password: hashedPassword,
+    name,
+    addressLine1,
+    addressLine2,
+    postal_code,
+    city,
+    country,
+    phone
   };
   customers.push(newCustomer);
   writeCustomers(customers);

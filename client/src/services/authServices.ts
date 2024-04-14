@@ -1,6 +1,7 @@
-import UserFormData from "../models/UserFormData";
+import RegisterUserFormData from "../models/RegisterUserFormData";
+import SignInUserFormData from "../models/SignInUserFormData";
 
-export const registerUser = async (userFormData: UserFormData) => {
+export const registerUser = async (userFormData: RegisterUserFormData) => {
   try {
     const url = "http://localhost:3000/stripe/create-customer";
     const payload: RequestInit = {
@@ -10,12 +11,14 @@ export const registerUser = async (userFormData: UserFormData) => {
     };
     const response = await fetch(url, payload);
     if (!response.ok) throw new Error(response.statusText);
+    const data = await response.json();
+    return data;
   } catch (error) {
     throw error;
   }
 };
 
-export const signIn = async (userFormData: UserFormData) => {
+export const signIn = async (userFormData: SignInUserFormData) => {
   try {
     const url = "http://localhost:3000/auth/signin";
     const payload: RequestInit = {
