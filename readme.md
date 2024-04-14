@@ -17,6 +17,9 @@ Fokus har främst legat på att hantera kopplingar mot Stripe, som används för
 - Ordrar sparas i JSON-filer i backend
 - Kontroll av betalning mot Stripe före order skapas
 
+- Rabattkoder kan anges i Stripe
+- Inloggade kunder kan se sina tidigare ordrar
+
 ## Github-länk
 
 https://github.com/davidb-webdev/checkout
