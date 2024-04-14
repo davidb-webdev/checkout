@@ -18,7 +18,7 @@ Projektet innehåller en enkel webbutik med kassa/checkout via Stripe.
 
 ## Github-länk
 
-(https://github.com/davidb-webdev/checkout)
+https://github.com/davidb-webdev/checkout
 
 ## Instruktioner
 
