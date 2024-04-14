@@ -67,41 +67,42 @@ const verifySessionAndCreateOrder = async (req, res) => {
     const lineItems = await stripe.checkout.sessions.listLineItems(
       req.body.sessionId
     );
+
+    if (session.payment_status === "paid") {
+      const orders = await readOrders();
+      const orderExists = orders.find(
+        (order) => order.sessionId === req.body.sessionId
+      );
+
+      if (!orderExists) {
+        const order = {
+          orderNumber: Math.floor(Math.random() * 1000000000),
+          sessionId: req.body.sessionId,
+          orderDate: new Date(),
+          customerDetails: {
+            id: session.customer,
+            name: session.customer_details.name,
+            email: session.customer_details.email
+          },
+          orderTotal: session.amount_total,
+          deliveryPoint: 999,
+          products: lineItems.data.map((item) => {
+            return {
+              id: item.price.product,
+              description: item.description,
+              amount: item.price.unit_amount,
+              quantity: item.quantity
+            };
+          })
+        };
+        orders.push(order);
+        await writeOrders(orders);
+      }
+
+      return res.status(200).json("Order successful");
+    }
   } catch (error) {
     return res.status(400).json(error);
-  }
-
-  if (session.payment_status === "paid") {
-    const orders = await readOrders();
-    const orderExists = orders.find(
-      (order) => order.sessionId === req.body.sessionId
-    );
-
-    if (!orderExists) {
-      const order = {
-        orderNumber: Math.floor(Math.random() * 1000000000),
-        sessionId: req.body.sessionId,
-        orderDate: new Date(),
-        customerDetails: {
-          id: session.customer,
-          name: session.customer_details.name,
-          email: session.customer_details.email
-        },
-        orderTotal: session.amount_total,
-        deliveryPoint: 999,
-        products: lineItems.data.map((item) => {
-          return {
-            id: item.price.product,
-            amount: item.price.unit_amount,
-            quantity: item.quantity
-          };
-        })
-      };
-      orders.push(order);
-      await writeOrders(orders);
-    }
-
-    return res.status(200).json("Order successful");
   }
 
   res.status(400).json("Order failed");
