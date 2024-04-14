@@ -9,8 +9,12 @@ const useProducts = () => {
     if (products) return;
 
     const awaitGetProducts = async () => {
-      const data = await getProducts();
-      setProducts(data.data);
+      try {
+        const data = await getProducts();
+        setProducts(data.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     awaitGetProducts();
   });

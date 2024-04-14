@@ -9,8 +9,12 @@ const useOrders = () => {
     if (orders) return;
 
     const awaitGetOrders = async () => {
-      const data = await getOrders();
-      setOrders(data);
+      try {
+        const data = await getOrders();
+        setOrders(data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     awaitGetOrders();
   });
