@@ -32,6 +32,8 @@ En .env-fil behöver skapas i client-mappen:
 
 ```
 VITE_BACKEND_URL=http://localhost:3000
+VITE_POSTNORD_BASE_URL=https://atapi2.postnord.com
+VITE_POSTNORD_API_KEY=[Ange nyckel till PostNords Service Points v5-API]
 ```
 
 Kör:
