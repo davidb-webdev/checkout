@@ -8,12 +8,17 @@ const ConfirmOrderPage = () => {
     if (orderConfirmed) return;
 
     const awaitVerifyOrder = async () => {
-      const sessionId = localStorage.getItem("sessionId");
-      if (!sessionId) return;
-      const data = await verifyOrder(sessionId);
-      console.log(data);
-      setOrderConfirmed(true);
-      localStorage.removeItem("sessionId");
+      try {
+        const sessionId = localStorage.getItem("sessionId");
+        if (!sessionId) return;
+        const data = await verifyOrder(sessionId);
+        console.log(data);
+        setOrderConfirmed(true);
+        localStorage.removeItem("sessionId");
+        localStorage.removeItem("cart");
+      } catch (error) {
+        console.log(error);
+      }
     };
     awaitVerifyOrder();
   });

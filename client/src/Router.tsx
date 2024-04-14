@@ -5,6 +5,7 @@ import ProductDetailsPage from "./pages/ProductDetailsPage";
 import ProductListPage from "./pages/ProductListPage";
 import ConfirmOrderPage from "./pages/ConfirmOrderPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import MyOrdersPage from "./pages/MyOrdersPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/confirmorder",
         element: <ConfirmOrderPage />
+      },
+      {
+        path: "/myorders",
+        element: <MyOrdersPage />
       }
     ]
   }

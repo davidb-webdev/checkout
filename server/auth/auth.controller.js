@@ -1,4 +1,4 @@
-const { readCustomers } = require("../utils/fs.util.js");
+const { readCustomers, readOrders } = require("../utils/fs.util.js");
 const bcrypt = require("bcrypt");
 
 const signInCustomer = async (req, res) => {
@@ -30,4 +30,21 @@ const authorizeCustomer = (req, res) => {
   return res.status(200).json("You are signed in");
 };
 
-module.exports = { signInCustomer, signOutCustomer, authorizeCustomer };
+const getOrders = async (req, res) => {
+  if (!req.session.id) {
+    return res.status(401).json("You are not signed in");
+  }
+
+  const orders = await readOrders();
+  const customerOrders = orders.filter(
+    (order) => order.customerDetails.id === req.session.id
+  );
+  return res.status(200).json(customerOrders);
+};
+
+module.exports = {
+  signInCustomer,
+  signOutCustomer,
+  authorizeCustomer,
+  getOrders
+};

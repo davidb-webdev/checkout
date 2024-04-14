@@ -3,14 +3,18 @@ import IProduct from "../models/IProduct";
 import { getProducts } from "../services/stripeServices";
 
 const useProducts = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const [products, setProducts] = useState<IProduct[] | null>();
 
   useEffect(() => {
-    if (products.length > 0) return;
+    if (products) return;
 
     const awaitGetProducts = async () => {
-      const data = await getProducts();
-      setProducts(data.data);
+      try {
+        const data = await getProducts();
+        setProducts(data.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     awaitGetProducts();
   });

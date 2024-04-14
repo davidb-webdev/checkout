@@ -31,7 +31,7 @@ const ProductDetails = ({ productId }: IProductDetailsProps) => {
           </button>
         </>
       ) : (
-        <p>Could not retrieve product</p>
+        <p>Could not find product</p>
       )}
     </>
   );

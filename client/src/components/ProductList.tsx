@@ -10,7 +10,7 @@ const ProductList = () => {
 
   return (
     <>
-      {products.length > 0 ? (
+      {products && products.length > 0 ? (
         products.map((product) => (
           <div key={product.name}>
             <Link to={`/product/${product.id}`}>
@@ -33,7 +33,7 @@ const ProductList = () => {
           </div>
         ))
       ) : (
-        <p>No products in list</p>
+        <p>Could not find any products</p>
       )}
     </>
   );
