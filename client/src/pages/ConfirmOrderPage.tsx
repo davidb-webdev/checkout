@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { verifyOrder } from "../services/stripeServices";
+import CartContext from "../contexts/CartContext";
+import { CartActionType } from "../reducers/CartReducer";
 
 const ConfirmOrderPage = () => {
+  const { cart, dispatch } = useContext(CartContext);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
+
   useEffect(() => {
     if (orderConfirmed) return;
 
@@ -11,11 +15,19 @@ const ConfirmOrderPage = () => {
       try {
         const sessionId = localStorage.getItem("sessionId");
         if (!sessionId) return;
+
         const data = await verifyOrder(sessionId);
         console.log(data);
+
         setOrderConfirmed(true);
         localStorage.removeItem("sessionId");
-        localStorage.removeItem("cart");
+
+        cart.forEach((item) =>
+          dispatch({
+            type: CartActionType.REMOVED,
+            payload: item.id
+          })
+        );
       } catch (error) {
         console.log(error);
       }

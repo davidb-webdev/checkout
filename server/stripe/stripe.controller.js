@@ -47,6 +47,7 @@ const createCheckoutSession = async (req, res) => {
         price: item.id,
         quantity: item.quantity
       })),
+      allow_promotion_codes: true,
       success_url: "http://localhost:5173/confirmorder",
       cancel_url: "http://localhost:5173/checkout"
     });
