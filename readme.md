@@ -2,7 +2,9 @@
 
 ## Beskrivning
 
-Projektet innehåller en enkel webbutik med kassa/checkout via Stripe.
+Repot innehåller en enkel webbutik, med frontend i React och backend i Node.js.
+Fokus har främst legat på att hantera kopplingar mot Stripe, som används för att lista produkter, registrera kunder och genomföra betalningar.
+
 
 ## Funktioner och uppfyllda krav
 
@@ -24,7 +26,7 @@ https://github.com/davidb-webdev/checkout
 
 ### client
 
-- En .env-fil behöver skapas i client-mappen:
+En .env-fil behöver skapas i client-mappen:
 
 ```
 VITE_BACKEND_URL=http://localhost:3000
