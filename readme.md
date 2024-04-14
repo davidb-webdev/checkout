@@ -5,7 +5,6 @@
 Repot innehåller en enkel webbutik, med frontend i React och backend i Node.js.
 Fokus har främst legat på att hantera kopplingar mot Stripe, som används för att lista produkter, registrera kunder och genomföra betalningar.
 
-
 ## Funktioner och uppfyllda krav
 
 - Listning av produkter (översikt samt enskilda produktsidor)

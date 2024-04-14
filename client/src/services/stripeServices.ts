@@ -2,8 +2,26 @@ import CartItem from "../models/CartItem";
 import ICreateSessionResponse from "../models/ICreateSessionResponse";
 import IProduct from "../models/IProduct";
 import IProductsResponse from "../models/IProductsResponse";
+import RegisterUserFormData from "../models/RegisterUserFormData";
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+export const registerUser = async (userFormData: RegisterUserFormData) => {
+  try {
+    const url = baseUrl + "/stripe/create-customer";
+    const payload: RequestInit = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userFormData)
+    };
+    const response = await fetch(url, payload);
+    if (!response.ok) throw new Error(response.statusText);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getProduct = async (productId: string) => {
   try {

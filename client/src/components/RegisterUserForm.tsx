@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext, useState } from "react";
-import { registerUser } from "../services/authServices";
+import { registerUser } from "../services/stripeServices";
 import RegisterUserFormData from "../models/RegisterUserFormData";
 import styled from "styled-components";
 import { AuthContext } from "../contexts/AuthContext";
