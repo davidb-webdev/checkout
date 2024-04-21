@@ -11,7 +11,7 @@ const router = express.Router();
 router.post("/create-checkout-session", createCheckoutSession);
 router.post("/verify-order", verifySessionAndCreateOrder);
 router.post("/create-customer", createCustomer);
-router.get("/products", getProducts);
+router.post("/products", getProducts);
 router.get("/product/:id", getProduct);
 
 module.exports = router;

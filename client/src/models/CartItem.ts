@@ -1,3 +1,8 @@
 export default class CartItem {
-  constructor(public id: string, public quantity: number) {}
+  constructor(
+    public productId: string,
+    public priceId: string,
+    public name: string,
+    public quantity: number
+  ) {}
 }

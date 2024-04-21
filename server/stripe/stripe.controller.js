@@ -13,6 +13,7 @@ const getProducts = async (req, res) => {
     const products = await stripe.products.list({
       active: true,
       limit: 10,
+      ids: req.body,
       expand: ["data.default_price"]
     });
     return res.status(200).json(products);

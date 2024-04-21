@@ -59,7 +59,7 @@ h1 {
 input,
 button {
   border-radius: var(--radius-full);
-  padding: var(--spacing-quarter) var(--spacing-default);
+  padding: var(--spacing-half) var(--spacing-default);
   font-size: var(--font-size-body);
 }
 

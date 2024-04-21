@@ -7,27 +7,32 @@ export enum CartActionType {
 
 export interface ICartAction {
   type: CartActionType;
-  payload: string;
+  productId: string;
+  priceId?: string;
+  name?: string;
 }
 
 const CartReducer = (cart: CartItem[], action: ICartAction) => {
   switch (action.type) {
     case CartActionType.ADDED: {
-      const id = String(action.payload);
-      if (cart.some((item) => item.id === id)) {
+      const { productId, priceId, name } = action;
+      if (cart.some((item) => item.productId === productId)) {
         return cart.map((item) => {
-          return item.id === id
+          return item.productId === productId
             ? { ...item, quantity: item.quantity + 1 }
             : item;
         });
       } else {
-        return [...cart, new CartItem(id, 1)];
+        if (!priceId || !name) {
+          return cart;
+        }
+        return [...cart, new CartItem(productId, priceId, name, 1)];
       }
     }
 
     case CartActionType.REMOVED: {
-      const id = String(action.payload);
-      return cart.filter((item) => item.id !== id);
+      const { productId } = action;
+      return cart.filter((item) => item.productId !== productId);
     }
 
     default: {
