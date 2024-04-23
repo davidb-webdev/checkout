@@ -1,19 +1,9 @@
 import { ChangeEvent, useContext, useState } from "react";
 import { registerUser } from "../services/stripeServices";
 import RegisterUserFormData from "../models/RegisterUserFormData";
-import styled from "styled-components";
 import { AuthContext } from "../contexts/AuthContext";
 import SignInUserFormData from "../models/SignInUserFormData";
-
-const StyledRegisterUserForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-
-  input {
-    margin-left: 1em;
-  }
-`;
+import StyledForm from "../styled/StyledForm";
 
 const RegisterUserForm = () => {
   const { handleSignIn } = useContext(AuthContext);
@@ -29,7 +19,7 @@ const RegisterUserForm = () => {
   };
 
   return (
-    <StyledRegisterUserForm
+    <StyledForm
       onSubmit={async (e) => {
         e.preventDefault();
         try {
@@ -44,7 +34,7 @@ const RegisterUserForm = () => {
       }}
     >
       <label>
-        E-mail:
+        <span>E-mail:</span>
         <input
           type="text"
           name="email"
@@ -54,7 +44,7 @@ const RegisterUserForm = () => {
         />
       </label>
       <label>
-        Create password:
+        <span>Create password:</span>
         <input
           name="password"
           type="password"
@@ -64,7 +54,7 @@ const RegisterUserForm = () => {
         />
       </label>
       <label>
-        Your name:
+        <span>Your name:</span>
         <input
           type="text"
           name="name"
@@ -74,7 +64,7 @@ const RegisterUserForm = () => {
         />
       </label>
       <label>
-        Address line 1:
+        <span>Address line 1:</span>
         <input
           type="text"
           name="addressLine1"
@@ -84,7 +74,7 @@ const RegisterUserForm = () => {
         />
       </label>
       <label>
-        Address line 2:
+        <span>Address line 2:</span>
         <input
           type="text"
           name="addressLine2"
@@ -94,7 +84,7 @@ const RegisterUserForm = () => {
         />
       </label>
       <label>
-        Postal Code:
+        <span>Postal Code:</span>
         <input
           type="text"
           name="addressPostalCode"
@@ -104,7 +94,7 @@ const RegisterUserForm = () => {
         />
       </label>
       <label>
-        City:
+        <span>City:</span>
         <input
           type="text"
           name="addressCity"
@@ -114,7 +104,7 @@ const RegisterUserForm = () => {
         />
       </label>
       <label>
-        Country:
+        <span>Country:</span>
         <input
           type="text"
           name="addressCountry"
@@ -124,7 +114,7 @@ const RegisterUserForm = () => {
         />
       </label>
       <label>
-        Phone:
+        <span>Phone:</span>
         <input
           type="tel"
           name="phone"
@@ -134,7 +124,7 @@ const RegisterUserForm = () => {
         />
       </label>
       <button>Register</button>
-    </StyledRegisterUserForm>
+    </StyledForm>
   );
 };
 

@@ -61,6 +61,7 @@ button {
   border-radius: var(--radius-full);
   padding: var(--spacing-half) var(--spacing-default);
   font-size: var(--font-size-body);
+  height: calc(1rem + 2 * var(--spacing-half));
 }
 
 input {
