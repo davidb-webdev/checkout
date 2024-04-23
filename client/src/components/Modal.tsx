@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { ModalActionType } from "../reducers/ModalReducer";
 import StyledModal from "../styled/StyledModal";
 import ModalContext from "../contexts/ModalContext";
+import StyledMiniButton from "../styled/StyledMiniButton";
 
 interface IModalProps {
   modalName: string;
@@ -15,7 +16,7 @@ const Modal = ({ modalName, children }: IModalProps) => {
     modal === modalName && (
       <StyledModal>
         {children}
-        <button
+        <StyledMiniButton
           className="closeModalButton"
           onClick={() => {
             dispatch({
@@ -24,7 +25,7 @@ const Modal = ({ modalName, children }: IModalProps) => {
           }}
         >
           𝗫
-        </button>
+        </StyledMiniButton>
       </StyledModal>
     )
   );

@@ -28,9 +28,11 @@ const Modals = () => {
       </Modal>
 
       <Modal modalName="cart">
+        <h2>Cart</h2>
         <Cart />
         <p>
           <Link
+          className="styleAsButton"
             to="/checkout"
             onClick={() => {
               dispatch({

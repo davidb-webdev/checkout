@@ -2,6 +2,7 @@ import { useContext } from "react";
 import CartContext from "../contexts/CartContext";
 import { CartActionType } from "../reducers/CartReducer";
 import StyledUl from "../styled/StyledUl";
+import StyledMiniButton from "../styled/StyledMiniButton";
 
 const Cart = () => {
   const { cart, dispatch } = useContext(CartContext);
@@ -11,10 +12,9 @@ const Cart = () => {
       {cart.length > 0
         ? cart.map((item) => (
             <li key={item.productId}>
-              <span>
-                {item.name} - {item.quantity}
-              </span>
-              <button
+              <span>{item.name}</span>
+              <span>{item.quantity}</span>
+              <StyledMiniButton
                 onClick={() => {
                   dispatch({
                     type: CartActionType.REMOVED,
@@ -22,8 +22,8 @@ const Cart = () => {
                   });
                 }}
               >
-                ❌
-              </button>
+                🗑️
+              </StyledMiniButton>
             </li>
           ))
         : "Cart is empty"}

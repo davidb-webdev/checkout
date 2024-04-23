@@ -8,8 +8,7 @@ const StyledModal = styled.div`
   background-color: var(--color-bg-secondary);
   color: var(--color-text-secondary);
   padding: var(--spacing-default);
-  padding-bottom: calc(var(--spacing-default) + 2rem);
-  border-radius: var(--radius-default);
+  border-radius: 0 0 var(--radius-default) var(--radius-default);
 
   a {
     color: var(--color-text-secondary);
@@ -21,10 +20,8 @@ const StyledModal = styled.div`
 
   > .closeModalButton {
     position: absolute;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    border-radius: 0;
+    top: var(--spacing-half);
+    right: var(--spacing-half);
   }
 `;
 
