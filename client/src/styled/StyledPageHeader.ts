@@ -11,6 +11,7 @@ const StyledPageHeader = styled.header`
   position: fixed;
   top: 0;
   z-index: var(--z-above);
+  color: var(--color-text-secondary);
 
   > div {
     display: flex;

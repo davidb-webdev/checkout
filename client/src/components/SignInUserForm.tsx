@@ -4,7 +4,8 @@ import SignInUserFormData from "../models/SignInUserFormData";
 import StyledForm from "../styled/StyledForm";
 
 const SignInUserForm = () => {
-  const { handleSignIn } = useContext(AuthContext);
+  const { handleSignIn, statusMessage, clearStatusMessage } =
+    useContext(AuthContext);
   const [formData, setFormData] = useState<SignInUserFormData>(
     new SignInUserFormData("", "")
   );
@@ -20,7 +21,9 @@ const SignInUserForm = () => {
     <StyledForm
       onSubmit={(e) => {
         e.preventDefault();
+        clearStatusMessage();
         handleSignIn(formData);
+        
       }}
     >
       <label>
@@ -44,6 +47,7 @@ const SignInUserForm = () => {
         />
       </label>
       <button>Sign In</button>
+      <p>{statusMessage}</p>
     </StyledForm>
   );
 };
