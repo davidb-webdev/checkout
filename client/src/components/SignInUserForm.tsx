@@ -1,20 +1,11 @@
 import { ChangeEvent, useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import SignInUserFormData from "../models/SignInUserFormData";
-import styled from "styled-components";
-
-const StyledSignInUserForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-
-  input {
-    margin-left: 1em;
-  }
-`;
+import StyledForm from "../styled/StyledForm";
 
 const SignInUserForm = () => {
-  const { handleSignIn } = useContext(AuthContext);
+  const { handleSignIn, statusMessage, clearStatusMessage } =
+    useContext(AuthContext);
   const [formData, setFormData] = useState<SignInUserFormData>(
     new SignInUserFormData("", "")
   );
@@ -27,14 +18,16 @@ const SignInUserForm = () => {
   };
 
   return (
-    <StyledSignInUserForm
+    <StyledForm
       onSubmit={(e) => {
         e.preventDefault();
+        clearStatusMessage();
         handleSignIn(formData);
+        
       }}
     >
       <label>
-        E-mail:
+        <span>E-mail:</span>
         <input
           type="text"
           name="email"
@@ -44,7 +37,7 @@ const SignInUserForm = () => {
         />
       </label>
       <label>
-        Password:
+        <span>Password:</span>
         <input
           name="password"
           type="password"
@@ -54,7 +47,8 @@ const SignInUserForm = () => {
         />
       </label>
       <button>Sign In</button>
-    </StyledSignInUserForm>
+      <p>{statusMessage}</p>
+    </StyledForm>
   );
 };
 

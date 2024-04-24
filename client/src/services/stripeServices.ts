@@ -35,10 +35,15 @@ export const getProduct = async (productId: string) => {
   }
 };
 
-export const getProducts = async () => {
+export const getProducts = async (productIds?: string[]) => {
   try {
     const url = baseUrl + "/stripe/products";
-    const response = await fetch(url);
+    const payload: RequestInit = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(productIds)
+    };
+    const response = await fetch(url, payload);
     if (!response.ok) throw new Error(response.statusText);
     const data: IProductsResponse = await response.json();
     return data;

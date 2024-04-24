@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import IProduct from "../models/IProduct";
 import { getProducts } from "../services/stripeServices";
 
-const useProducts = () => {
+const useProducts = (productIds?: string[]) => {
   const [products, setProducts] = useState<IProduct[] | null>();
 
   useEffect(() => {
@@ -10,7 +10,7 @@ const useProducts = () => {
 
     const awaitGetProducts = async () => {
       try {
-        const data = await getProducts();
+        const data = await getProducts(productIds);
         setProducts(data.data);
       } catch (error) {
         console.log(error);

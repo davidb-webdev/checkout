@@ -1,41 +1,33 @@
-import { useContext } from "react";
-import { CartActionType } from "../reducers/CartReducer";
-import CartContext from "../contexts/CartContext";
 import useProducts from "../hooks/useProducts";
 import { Link } from "react-router-dom";
+import StyledCardList from "../styled/StyledCardList";
+import AddToCartButton from "./AddToCartButton";
 
 const ProductList = () => {
-  const { dispatch } = useContext(CartContext);
   const products = useProducts();
 
   return (
-    <>
+    <StyledCardList>
       {products && products.length > 0 ? (
         products.map((product) => (
-          <div key={product.name}>
+          <div key={product.id}>
             <Link to={`/product/${product.id}`}>
               <img src={product.images[0]} alt={product.name} />
-              <p>{product.name}</p>
-              <p>{product.default_price.unit_amount / 100} kr</p>
             </Link>
-            <button
-              disabled={!product.default_price}
-              onClick={() => {
-                if (!product.default_price) return;
-                dispatch({
-                  type: CartActionType.ADDED,
-                  payload: product.default_price.id
-                });
-              }}
-            >
-              🛒
-            </button>
+            <Link to={`/product/${product.id}`}>{product.name}</Link>
+            <span>{product.default_price.unit_amount / 100} kr</span>
+
+            <AddToCartButton
+              productId={product.id}
+              priceId={product.default_price.id}
+              name={product.name}
+            />
           </div>
         ))
       ) : (
         <p>Could not find any products</p>
       )}
-    </>
+    </StyledCardList>
   );
 };
 
