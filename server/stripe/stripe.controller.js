@@ -44,7 +44,7 @@ const createCheckoutSession = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       customer: req.session.id,
-      line_items: req.body.map((item) => ({
+      line_items: req.body.lineItems.map((item) => ({
         price: item.id,
         quantity: item.quantity
       })),
@@ -87,7 +87,6 @@ const verifySessionAndCreateOrder = async (req, res) => {
             email: session.customer_details.email
           },
           orderTotal: session.amount_total,
-          deliveryPoint: 999,
           products: lineItems.data.map((item) => {
             return {
               id: item.price.product,

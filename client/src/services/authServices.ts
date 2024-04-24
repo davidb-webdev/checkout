@@ -1,3 +1,4 @@
+import DeliveryFormData from "../models/DeliveryFormData";
 import IOrder from "../models/IOrder";
 import SignInUserFormData from "../models/SignInUserFormData";
 
@@ -44,6 +45,21 @@ export const authorizeUser = async () => {
     };
     const response = await fetch(url, payload);
     if (!response.ok) throw new Error(response.statusText);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getDeliveryData = async () => {
+  try {
+    const url = baseUrl + "/auth/getDeliveryData";
+    const payload: RequestInit = {
+      credentials: "include"
+    };
+    const response = await fetch(url, payload);
+    if (!response.ok) throw new Error(response.statusText);
+    const data: DeliveryFormData = await response.json();
+    return data;
   } catch (error) {
     throw error;
   }

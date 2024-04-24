@@ -52,15 +52,23 @@ export const getProducts = async (productIds?: string[]) => {
   }
 };
 
-export const createCheckoutSession = async (body: CartItem[]) => {
+export const createCheckoutSession = async (
+  servicePoint: string,
+  items: CartItem[]
+) => {
   try {
     const url = baseUrl + "/stripe/create-checkout-session";
+    const lineItems = items.map((item) => ({
+      id: item.priceId,
+      quantity: item.quantity
+    }));
     const payload: RequestInit = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify(body)
+      body: JSON.stringify({ servicePoint, lineItems })
     };
+    console.log(payload);
     const response = await fetch(url, payload);
     if (!response.ok) throw new Error(response.statusText);
     const data: ICreateSessionResponse = await response.json();

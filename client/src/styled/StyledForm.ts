@@ -9,6 +9,11 @@ const StyledForm = styled.form`
   label {
 		display: grid;
 		line-height: 2;
+
+		&:has([type=radio], [type=checkbox]) {
+			grid-template-columns: auto 1fr;
+			gap: var(--spacing-half);
+		}
 	}
 `;
 
