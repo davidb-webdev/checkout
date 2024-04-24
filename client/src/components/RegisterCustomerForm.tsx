@@ -87,7 +87,7 @@ const RegisterUserForm = () => {
         <span>Postal Code:</span>
         <input
           type="text"
-          name="addressPostalCode"
+          name="postal_code"
           value={formData.postal_code}
           onChange={handleFormChange}
           required
@@ -97,7 +97,7 @@ const RegisterUserForm = () => {
         <span>City:</span>
         <input
           type="text"
-          name="addressCity"
+          name="city"
           value={formData.city}
           onChange={handleFormChange}
           required
@@ -107,10 +107,11 @@ const RegisterUserForm = () => {
         <span>Country:</span>
         <input
           type="text"
-          name="addressCountry"
-          value={formData.country}
+          name="country"
+          value="SE"
           onChange={handleFormChange}
           required
+          disabled
         />
       </label>
       <label>
