@@ -25,7 +25,7 @@ const ConfirmOrderPage = () => {
         cart.forEach((item) =>
           dispatch({
             type: CartActionType.REMOVED,
-            payload: item.id
+            productId: item.productId
           })
         );
       } catch (error) {

@@ -16,7 +16,7 @@ Fokus har främst legat på att hantera kopplingar mot Stripe, som används för
 - Användaren måste vara inloggad för att kunna genomföra köp
 - Ordrar sparas i JSON-filer i backend
 - Kontroll av betalning mot Stripe före order skapas
-
+- Utlämningsställe kan väljas via PostNord
 - Rabattkoder kan anges i Stripe
 - Inloggade kunder kan se sina tidigare ordrar
 

@@ -5,7 +5,11 @@ import { getDeliveryData } from "../services/authServices";
 import { getServicePoints } from "../services/postnordServices";
 import IServicePoint from "../models/IServicePoint";
 
-const DeliveryForm = () => {
+interface IDeliveryFormProps {
+  selectServicePoint: (servicePointId: string) => void;
+}
+
+const DeliveryForm = ({ selectServicePoint }: IDeliveryFormProps) => {
   const [formData, setFormData] = useState<DeliveryFormData>();
   const [servicePoints, setServicePoints] = useState<IServicePoint[]>();
 
@@ -121,22 +125,27 @@ const DeliveryForm = () => {
         </button>
       </StyledForm>
 
-      {servicePoints && (
+      {servicePoints ? (
         <>
-					<h2>Select a delivery point</h2>
+          <h2>Select a delivery point</h2>
           <StyledForm>
             {servicePoints.map((servicePoint) => (
-              <label>
+              <label key={servicePoint.servicePointId}>
                 <input
                   type="radio"
                   name="servicePoints"
                   value={servicePoint.servicePointId}
+                  onClick={(e) => {
+                    selectServicePoint(e.currentTarget.value);
+                  }}
                 />
                 {servicePoint.name}
               </label>
             ))}
           </StyledForm>
         </>
+      ) : (
+        "Loading service points"
       )}
     </>
   ) : (
