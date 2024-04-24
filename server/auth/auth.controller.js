@@ -30,6 +30,37 @@ const authorizeCustomer = (req, res) => {
   return res.status(200).json("You are signed in");
 };
 
+const getDeliveryData = async (req, res) => {
+  if (!req.session.id) {
+    return res.status(401).json("You are not signed in");
+  }
+
+  const customers = await readCustomers();
+  const thisCustomer = customers.find(
+    (customer) => customer.id === req.session.id
+  );
+
+  const {
+    name,
+    addressLine1,
+    addressLine2,
+    postal_code,
+    city,
+    country,
+    phone
+  } = thisCustomer;
+  const deliveryData = {
+    name,
+    addressLine1,
+    addressLine2,
+    postal_code,
+    city,
+    country,
+    phone
+  };
+  return res.status(200).json(deliveryData);
+};
+
 const getOrders = async (req, res) => {
   if (!req.session.id) {
     return res.status(401).json("You are not signed in");
@@ -46,5 +77,6 @@ module.exports = {
   signInCustomer,
   signOutCustomer,
   authorizeCustomer,
+  getDeliveryData,
   getOrders
 };
